@@ -1,0 +1,156 @@
+[gd_scene load_steps=17 format=3 uid="uid://kabv827ij32l"]
+
+[ext_resource type="Texture2D" uid="uid://dobvyqdrh34ay" path="res://addons/Godot-particle-and-vfx-textures/materials/rendered_particles/0002.png" id="1_8pxyj"]
+
+[sub_resource type="Environment" id="Environment_cp3fw"]
+background_mode = 1
+tonemap_mode = 2
+glow_enabled = true
+glow_levels/1 = 1.0
+glow_levels/2 = 1.0
+glow_levels/3 = 0.4
+glow_levels/4 = 0.1
+glow_levels/5 = 0.0
+glow_intensity = 0.3
+glow_blend_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_6w1ad"]
+size = Vector3(64, 1, 64)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_pqt37"]
+fractal_gain = 0.6
+
+[sub_resource type="NoiseTexture" id="NoiseTexture_l5nfw"]
+seamless = true
+noise = SubResource("FastNoiseLite_pqt37")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_853st"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 0.780392, 0.478431, 0.0392157)
+grow = true
+grow_amount = 0.05
+proximity_fade_enable = true
+proximity_fade_distance = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pegfh"]
+next_pass = SubResource("StandardMaterial3D_853st")
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 0.898039, 0.486275, 0.12549)
+albedo_texture = SubResource("NoiseTexture_l5nfw")
+proximity_fade_enable = true
+proximity_fade_distance = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_aqdnk"]
+radius = 4.8
+height = 9.0
+radial_segments = 128
+rings = 64
+
+[sub_resource type="Curve" id="Curve_qum3q"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.12963, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bfj05"]
+curve = SubResource("Curve_qum3q")
+
+[sub_resource type="ParticlesMaterial" id="ParticlesMaterial_uk5de"]
+emission_shape = 2
+emission_sphere_radius = 5.0
+gravity = Vector3(0, -2, 0)
+scale_min = 0.1
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_bfj05")
+color = Color(1.5, 1.2, 0.8, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+collision_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lqfs"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_8pxyj")
+billboard_mode = 1
+billboard_keep_scale = true
+proximity_fade_enable = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_ctlh7"]
+material = SubResource("StandardMaterial3D_7lqfs")
+
+[sub_resource type="Curve" id="Curve_eeuce"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0274914, 1), 0.0, 0.0, 0, 0, Vector2(0.298969, 0.763636), 0.0, 0.0, 0, 0, Vector2(0.364261, 0.409091), 0.0, 0.0, 0, 0, Vector2(0.597938, 0.409091), 0.0, 0.0, 0, 0, Vector2(0.780069, 1), 0.0, 0.0, 0, 0, Vector2(0.914089, 0.981818), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_86604"]
+albedo_color = Color(0.792157, 1, 0.905882, 1)
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_pn4uw"]
+material = SubResource("StandardMaterial3D_86604")
+radius = 1.0
+radial_steps = 64
+section_length = 0.5
+section_rings = 8
+curve = SubResource("Curve_eeuce")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cp3fw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.290102, 0.17682, -0.940518, 0, 0.982783, 0.184766, 0.956995, 0.0536011, -0.285107, -3.34944, 3.73022, -8.68336)
+visible = false
+shadow_enabled = true
+directional_shadow_max_distance = 250.0
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_6w1ad")
+
+[node name="ShieldSphere" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_pegfh")
+mesh = SubResource("SphereMesh_aqdnk")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+amount = 10000
+preprocess = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-5.98909, -10.6578, -6, 11.9887, 16.6489, 12)
+process_material = SubResource("ParticlesMaterial_uk5de")
+draw_pass_1 = SubResource("QuadMesh_ctlh7")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+light_color = Color(1, 0.819608, 0.47451, 1)
+light_energy = 2.0
+light_size = 11.0
+omni_range = 7.5
+
+[node name="OmniLight3DFakeIndirect" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+light_color = Color(1, 0.764706, 0, 1)
+light_energy = 2.0
+light_size = 12.0
+light_specular = 0.0
+omni_range = 25.0
+omni_attenuation = 2.0
+
+[node name="GPUParticlesAttractorSphere3D" type="GPUParticlesAttractorSphere3D" parent="."]
+strength = 3.0
+radius = 10.0
+
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="."]
+extents = Vector3(64, 1, 64)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.290487, 0.574495, -0.765227, 0, 0.799712, 0.600384, 0.956879, 0.174404, -0.232306, -9.82076, 8.75153, -2.90319)
+fov = 50.0
+
+[node name="Tower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+mesh = SubResource("TubeTrailMesh_pn4uw")
