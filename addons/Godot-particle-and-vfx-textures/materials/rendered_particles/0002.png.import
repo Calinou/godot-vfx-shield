@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dobvyqdrh34ay"
-path.s3tc="res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.s3tc.ctex"
-path.etc2="res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.etc2.ctex"
+path="res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.ctex"
 metadata={
-"imported_formats": ["s3tc", "etc2"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://addons/Godot-particle-and-vfx-textures/materials/rendered_particles/0002.png"
-dest_files=["res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.s3tc.ctex", "res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.etc2.ctex"]
+dest_files=["res://.godot/imported/0002.png-50f91c0fef90bca69faf79a67a42c377.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/bptc_ldr=0
