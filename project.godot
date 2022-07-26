@@ -14,6 +14,10 @@ config/name="Real-Time VFX #54: Shield"
 run/main_scene="res://test.tscn"
 config/features=PackedStringArray("4.0")
 
+[editor]
+
+movie_writer/movie_file="/home/hugo/Documents/Godot/godot-vfx-shield/output.avi"
+
 [filesystem]
 
 import/blender/enabled=false
